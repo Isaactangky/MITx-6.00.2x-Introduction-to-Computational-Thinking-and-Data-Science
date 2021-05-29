@@ -100,3 +100,83 @@ Although this problem has many parts, it should not take long once you have chos
 Hint: During debugging, you might want to use random.seed(0) so that your results are reproducible.
 
 Enter your code for RectangularRoom below.
+
+# Problem 2
+1 point possible (ungraded)
+In ps2.py we provided you with the Robot class, which stores the position and direction of a robot. For this class, decide what fields you will use and decide how the following operations are to be performed:
+
+- Initializing the object
+- Accessing the robot's position
+- Accessing the robot's direction
+- Setting the robot's position
+- Setting the robot's direction
+- Complete the Robot class by implementing its methods in ps2.py.
+
+Note: When a Robot is initialized, it should clean the first tile it is initialized on. Generally the model these Robots will follow is that after a robot lands on a given tile, we will mark the entire tile as clean. This might not make sense if you're thinking about really large tiles, but as we make the size of the tiles smaller and smaller, this does actually become a pretty good approximation.
+
+Although this problem has many parts, it should not take long once you have chosen how you wish to represent your data. For reasonable representations, a majority of the methods will require only a couple of lines of code.)
+
+Note: The Robot class is an abstract class, which means that we will never make an instance of it. Read up on the Python docs on abstract classes at this link and if you want more examples on abstract classes, follow this link.
+
+In the final implementation of Robot, not all methods will be implemented. Not to worry -- its subclass(es) will implement the method updatePositionAndClean()
+
+Enter your code for classes RectangularRoom (from the previous problem) and Robot below.
+
+# Problem 4: Running the Simulation
+10.0/10.0 points (graded)
+In this problem you will write code that runs a complete robot simulation.
+
+Recall that in each trial, the objective is to determine how many time-steps are on average needed before a specified fraction of the room has been cleaned. Implement the following function:
+
+def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
+                  robot_type):
+    """
+    Runs NUM_TRIALS trials of the simulation and returns the mean number of
+    time-steps needed to clean the fraction MIN_COVERAGE of the room.
+
+    The simulation is run with NUM_ROBOTS robots of type ROBOT_TYPE, each with
+    speed SPEED, in a room of dimensions WIDTH x HEIGHT.
+    """
+The first six parameters should be self-explanatory. For the time being, you should pass in StandardRobot for the robot_type parameter, like so:
+
+avg = runSimulation(10, 1.0, 15, 20, 0.8, 30, StandardRobot)
+Then, in runSimulation you should use robot_type(...) instead of StandardRobot(...) whenever you wish to instantiate a robot. (This will allow us to easily adapt the simulation to run with different robot implementations, which you'll encounter in Problem 6.)
+
+Feel free to write whatever helper functions you wish.
+
+We have provided the getNewPosition method of Position, which you may find helpful:
+
+class Position(object):
+
+    def getNewPosition(self, angle, speed):
+        """
+        Computes and returns the new Position after a single clock-tick has
+        passed, with this object as the current position, and with the
+        specified angle and speed.
+
+        Does NOT test whether the returned position fits inside the room.
+
+        angle: integer representing angle in degrees, 0 <= angle < 360
+        speed: positive float representing speed
+
+        Returns: a Position object representing the new position.
+        """
+For your reference, here are some approximate room cleaning times. These times are with a robot speed of 1.0.
+
+- One robot takes around 150 clock ticks to completely clean a 5x5 room.
+
+- One robot takes around 190 clock ticks to clean 75% of a 10x10 room.
+
+- One robot takes around 310 clock ticks to clean 90% of a 10x10 room.
+
+- One robot takes around 3322 clock ticks to completely clean a 20x20 room.
+
+- Three robots take around 1105 clock ticks to completely clean a 20x20 room.
+
+(These are only intended as guidelines. Depending on the exact details of your implementation, you may get times slightly different from ours.)
+
+You should also check your simulation's output for speeds other than 1.0. One way to do this is to take the above test cases, change the speeds, and make sure the results are sensible.
+
+For further testing, see the next page in this problem set about the optional way to use visualization methods. Visualization will help you see what's going on in the simulation and may assist you in debugging your code.
+
+Enter your code for the definition of runSimulation below.
