@@ -239,17 +239,17 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        while not self.room.isPositionInRoom(self.pos.getNewPosition(self.direction, self.speed)):
-            self.setRobotDirection(random.randint(0,359))
-    
-        self.pos = self.pos.getNewPosition(self.direction, self.speed)
-        self.room.cleanTileAtPosition(self.pos)
-        
+        newPos = self.pos.getNewPosition(self.direction, self.speed)
+        if self.room.isPositionInRoom(newPos):
+            self.pos = newPos
+            self.room.cleanTileAtPosition(self.pos)
+            return ##skip the last line
+        self.setRobotDirection(random.randint(0,359))
         #raise NotImplementedError
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-#testRobotMovement(StandardRobot, RectangularRoom)
+testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -276,10 +276,8 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
         anim = ps2_visualize.RobotVisualization(num_robots, width, height)
         NumStep = 0
         room = RectangularRoom(width, height)
-        robots = []
-        for i in range(num_robots):
-            robots.append(robot_type(room,speed))
-            print(i)
+        robots = [robot_type(room,speed) for _ in range(num_robots)]
+
         while (room.getNumCleanedTiles()/ room.getNumTiles()) < min_coverage:
             anim.update(room, robots)
             for i in range(num_robots):
@@ -293,7 +291,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     #raise NotImplementedError
 
 # Uncomment this line to see how much your simulation takes on average
-#print(runSimulation(1, 1.0, 20,20 , 1, 30, StandardRobot))
+print(runSimulation(1, 1.0, 20,20 , 1, 2, StandardRobot))
 
 
 # === Problem 5
