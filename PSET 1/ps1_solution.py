@@ -115,23 +115,22 @@ def brute_force_cow_transport(cows,limit=10):
     #Check all the partitions from get_partitions()
     #1. whether the trip is a goodtrip: Total weight of the trips<=limit
     #2. whether the number of trips  is < shortest
-    
     for part in get_partitions(cows.keys()):
         goodTrip = True
         #check the total weight of the individal trip in part
-        for i in range(len(part)):
+        for trip in part:
             
             weightSum = 0
-            for j in range(len(part[i])):
-                weightSum += cows[part[i][j]]
+            for cow in trip:
+                weightSum += cows[cow]
                 
             if weightSum > limit:
-                goodTrip = False
+                goodTrip= False
                 break
-         # if it's a good trip, check the len of the trip  
-        if len(part) < shortest and goodTrip == True:
-            BestTrips = part 
-            shortest = len(part)
+        # if it's a good trip, check the len of the trip  
+        if (len(BestTrips)==0 or len(part) < len(BestTrips)) and goodTrip == True:
+            BestTrips = part[:] 
+
     return BestTrips
     
 
