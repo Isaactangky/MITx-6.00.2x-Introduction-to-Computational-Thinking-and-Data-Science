@@ -56,25 +56,33 @@ def greedy_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
+    
     limitAval= limit
-    trips = [[]]
+    #return a lsit of list, sublists represent individual trip
+    trips = []
+    #store the cows already travelled 
     cowsTravelled = []
-    tripCount = 0
+
+    #create a copy of the lsit to avoid mutating the initial list
     itemsCopy = sorted(cows, key= cows.get, reverse = True)
+    ##creating trips if not all the cows are shipped
+    #if the weight of the cow < weight available and has not been shipped,
+    #   add it to the tempList and cowsTravelled
+    #   space limit reduced by the weight of the cow
+    
     while len(itemsCopy) != len(cowsTravelled):
-        for i in range(len(itemsCopy)):   
+        tempList = []
+        limitAval= limit
+        for i in range(len(itemsCopy)):
+            
             if cows[itemsCopy[i]] <= limitAval and itemsCopy[i] not in cowsTravelled:
-                trips[tripCount].append(itemsCopy[i])
+                tempList.append(itemsCopy[i])
                 cowsTravelled.append(itemsCopy[i])
                 limitAval -= cows[itemsCopy[i]]
-    
-            elif i == (len(itemsCopy)-1) and len(itemsCopy) != len(cowsTravelled):#reinitialize the spaceship
-                trips.append([])
-                tripCount = tripCount + 1
-                limitAval = limit
-    
+                
+        trips.append(tempList)
     return trips
-    #pass
+
 
 
 # Problem 2
@@ -99,11 +107,20 @@ def brute_force_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
+    # The worst case: the shortest case contain len(cows) trips
     shortest = len(cows)
+    #initizalize the return lsit as empty list of list
     BestTrips = [[]]
+    
+    #Check all the partitions from get_partitions()
+    #1. whether the trip is a goodtrip: Total weight of the trips<=limit
+    #2. whether the number of trips  is < shortest
+    
     for part in get_partitions(cows.keys()):
         goodTrip = True
+        #check the total weight of the individal trip in part
         for i in range(len(part)):
+            
             weightSum = 0
             for j in range(len(part[i])):
                 weightSum += cows[part[i][j]]
@@ -111,13 +128,12 @@ def brute_force_cow_transport(cows,limit=10):
             if weightSum > limit:
                 goodTrip = False
                 break
-            
+         # if it's a good trip, check the len of the trip  
         if len(part) < shortest and goodTrip == True:
             BestTrips = part 
             shortest = len(part)
     return BestTrips
     
-    #pass
 
         
 # Problem 3
@@ -141,7 +157,8 @@ def compare_cow_transport_algorithms(cows):
     greadyTrip = greedy_cow_transport(cows)
     end = time.time()
     print('Time for Gready:', end-start, '| Trips taken:', len(greadyTrip))
-    print(greadyTrip)
+    print(greadyTrip,'\n')
+    
     start1 = time.time()
     BFTrip = brute_force_cow_transport(cows)
     end1 = time.time()
@@ -155,8 +172,9 @@ lines to print the result of your problem.
 """
 
 cows = load_cows("ps1_cow_data.txt")
-limit=13
+limit=14
 print(cows)
 
 print(greedy_cow_transport(cows, limit))
 print(brute_force_cow_transport(cows, limit))
+compare_cow_transport_algorithms(cows)
